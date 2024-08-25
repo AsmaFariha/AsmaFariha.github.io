@@ -3,7 +3,7 @@
 #### Technical Skills: Python, SQL, Azure, Machine Learning
 
 ## Education						       		
-- MASc.., Electrical & Computer Engineering	| Ontario Tech University, Canada (_May 2024_)	 			        		
+- MASc, Electrical & Computer Engineering	| Ontario Tech University, Canada (_May 2024_)	 			        		
 
 ## Work Experience
 **Data Science Research Associate @ RTEMSoft Lab, Ontario Tech University, Canada (_June 2024 - Present_)**

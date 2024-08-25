@@ -41,6 +41,6 @@ Used **Matlab** to train over 100 machine learning models which estimated partic
 - [Data Science YouTube](https://www.youtube.com/channel/UCa9gErQ9AE5jT2DZLjXBIdA)
 
 ## Publications
-1. A. Fariha, S. Alwidian and A. Azim, ["Towards Requirements Specification Collaboration Forum for Embedded Software Systems,"] (https://ieeexplore.ieee.org/abstract/document/10350761) 2023 ACM/IEEE International Conference on Model Driven Engineering Languages and Systems Companion (MODELS-C), Västerås, Sweden, 2023, pp. 312-317, doi: 10.1109/MODELS-C59198.2023.00061.
+1. A. Fariha, S. Alwidian and A. Azim, !["Towards Requirements Specification Collaboration Forum for Embedded Software Systems,"] (https://ieeexplore.ieee.org/abstract/document/10350761) 2023 ACM/IEEE International Conference on Model Driven Engineering Languages and Systems Companion (MODELS-C), Västerås, Sweden, 2023, pp. 312-317, doi: 10.1109/MODELS-C59198.2023.00061.
 2. A. Fariha, S. Alwidian and A. Azim, "A Systematic Literature Review on Requirements Engineering and Maintenance for Embedded Software," in IEEE Access, vol. 12, pp. 114263-114279, 2024, doi: 10.1109/ACCESS.2024.3443271.
 3. S. Mostafi, A. Fariha, M. El-Darieby, K. Elgazzar and A. Azim, "A Novel Predictive Modelling Approach Towards a Spatiotemporal Traffic Safety Index," 2023 IEEE 26th International Conference on Intelligent Transportation Systems (ITSC), Bilbao, Spain, 2023, pp. 4373-4379, doi: 10.1109/ITSC57777.2023.10422420.

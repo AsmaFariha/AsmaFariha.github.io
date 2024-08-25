@@ -8,10 +8,10 @@
 ## Work Experience
 **Data Science Research Associate @ RTEMSoft Lab, Ontario Tech University, Canada (_June 2024 - Present_)**
 Developing predictive solutions for Team Eagle Airfield operation software quality, hosted in the Azure cloud.
-•	Machine learning model for time-series prediction on software quality metrics, such as random forest, gradient boosting, and LSTM with backtesting.
-•	Developing Grafana and customized dashboard for reporting and visualization.  
+- Machine learning model for time-series prediction on software quality metrics, such as random forest, gradient boosting, and LSTM with backtesting.
+-	Developing Grafana and customized dashboard for reporting and visualization.  
 
-**Data Science Consultant @ Shawhin Talebi Ventures LLC (_December 2020 - Present_)**
+**Machine Learning Analytics Research Assistant @ IBM CAS, Canada (_May 2023 - _April 2024)**
 - Conducted data collection, processing, and analysis for novel study evaluating the impact of over 300 biometrics variables on human performance in hyper-realistic, live-fire training scenarios
 - Applied unsupervised deep learning approaches to longitudinal ICU data to discover novel sepsis sub-phenotypes
 
@@ -41,12 +41,6 @@ Used **Matlab** to train over 100 machine learning models which estimated partic
 - [Data Science YouTube](https://www.youtube.com/channel/UCa9gErQ9AE5jT2DZLjXBIdA)
 
 ## Publications
-1. Talebi S., Lary D.J., Wijeratne L. OH., and Lary, T. Modeling Autonomic Pupillary Responses from External Stimuli Using Machine Learning (2019). DOI: 10.26717/BJSTR.2019.20.003446
-2. Wijeratne, L.O.; Kiv, D.R.; Aker, A.R.; Talebi, S.; Lary, D.J. Using Machine Learning for the Calibration of Airborne Particulate Sensors. Sensors 2020, 20, 99.
-3. Lary, D.J.; Schaefer, D.; Waczak, J.; Aker, A.; Barbosa, A.; Wijeratne, L.O.H.; Talebi, S.; Fernando, B.; Sadler, J.; Lary, T.; Lary, M.D. Autonomous Learning of New Environments with a Robotic Team Employing Hyper-Spectral Remote Sensing, Comprehensive In-Situ Sensing and Machine Learning. Sensors 2021, 21, 2240. https://doi.org/10.3390/s21062240
-4. Zhang, Y.; Wijeratne, L.O.H.; Talebi, S.; Lary, D.J. Machine Learning for Light Sensor Calibration. Sensors 2021, 21, 6259. https://doi.org/10.3390/s21186259
-5. Talebi, S.; Waczak, J.; Fernando, B.; Sridhar, A.; Lary, D.J. Data-Driven EEG Band Discovery with Decision Trees. Preprints 2022, 2022030145 (doi: 10.20944/preprints202203.0145.v1).
-6. Fernando, B.A.; Sridhar, A.; Talebi, S.; Waczak, J.; Lary, D.J. Unsupervised Blink Detection Using Eye Aspect Ratio Values. Preprints 2022, 2022030200 (doi: 10.20944/preprints202203.0200.v1).
-7. Talebi, S. et al. Decoding Physical and Cognitive Impacts of PM Concentrations at Ultra-fine Scales, 29 March 2022, PREPRINT (Version 1) available at Research Square [https://doi.org/10.21203/rs.3.rs-1499191/v1]
-8. Lary, D.J. et al. (2022). Machine Learning, Big Data, and Spatial Tools: A Combination to Reveal Complex Facts That Impact Environmental Health. In: Faruque, F.S. (eds) Geospatial Technology for Human Well-Being and Health. Springer, Cham. https://doi.org/10.1007/978-3-030-71377-5_12
-9. Wijerante, L.O.H. et al. (2022). Advancement in Airborne Particulate Estimation Using Machine Learning. In: Faruque, F.S. (eds) Geospatial Technology for Human Well-Being and Health. Springer, Cham. https://doi.org/10.1007/978-3-030-71377-5_13
+1. A. Fariha, S. Alwidian and A. Azim, ("Towards Requirements Specification Collaboration Forum for Embedded Software Systems,") [https://ieeexplore.ieee.org/abstract/document/10350761] 2023 ACM/IEEE International Conference on Model Driven Engineering Languages and Systems Companion (MODELS-C), Västerås, Sweden, 2023, pp. 312-317, doi: 10.1109/MODELS-C59198.2023.00061.
+2. A. Fariha, S. Alwidian and A. Azim, "A Systematic Literature Review on Requirements Engineering and Maintenance for Embedded Software," in IEEE Access, vol. 12, pp. 114263-114279, 2024, doi: 10.1109/ACCESS.2024.3443271.
+3. S. Mostafi, A. Fariha, M. El-Darieby, K. Elgazzar and A. Azim, "A Novel Predictive Modelling Approach Towards a Spatiotemporal Traffic Safety Index," 2023 IEEE 26th International Conference on Intelligent Transportation Systems (ITSC), Bilbao, Spain, 2023, pp. 4373-4379, doi: 10.1109/ITSC57777.2023.10422420.

@@ -3,10 +3,11 @@
 #### Technical Skills: Python, SQL, Azure, Machine Learning
 
 ## Education						       		
- MASc, Electrical & Computer Engineering	| Ontario Tech University, Canada (_May 2024_)	 			        		
+- MASc, Electrical & Computer Engineering	| Ontario Tech University, Canada (_May 2024_)	 			        		
 
 ## Work Experience
 **Data Science Research Associate @ RTEMSoft Lab, Ontario Tech University, Canada (_June 2024 - Present_)**
+
 Developing predictive solutions for Team Eagle Airfield operation software quality, hosted in the Azure cloud.
 - Machine learning model for time-series prediction on software quality metrics, such as random forest, gradient boosting, and LSTM with backtesting.
 -	Developing Grafana and customized dashboard for reporting and visualization.  

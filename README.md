@@ -30,7 +30,7 @@ Hi, I’m **Asma Fariha**! A passionate **Data Scientist**, **Researcher**, and 
 **IBM CAS, Canada** (_May 2023 – April 2024_)  
 - Applied ML on a **large-scale CI/CD dataset** (~4M entries) to enhance test case prioritization.  
 - Accelerated ML runtime by 60% with **advanced continual learning** and **A/B testing**.  
-- Published findings in [CCIW Workshop](https://conf.researchr.org/details/icst-2024/cciw-2024-papers/5/Replay-Based-Continual-Learning-for-Test-Case-Prioritization).
+- Published findings in [CCIW Workshop](https://ieeexplore.ieee.org/abstract/document/10675906).
 
 ---
 

@@ -1,5 +1,20 @@
-title: Asma Fariha
-logo: /assets/images/DSC08703.jpg
-#description: text below image
-#show_downloads: true
-theme: jekyll-theme-slate
+title: "Asma Fariha"
+logo: "/assets/images/DSC08703.jpg"
+description: "Data Scientist | Machine Learning Enthusiast | Researcher | Educator"
+theme: "jekyll-theme-slate"
+show_downloads: true
+footer_text: "Empowering insights through data and innovation."
+social_links:
+  - name: LinkedIn
+    url: https://www.linkedin.com/in/asma-fariha
+    icon: linkedin
+  - name: Google Scholar
+    url: https://scholar.google.com/citations?user=WVkjT2YAAAAJ&hl=en
+    icon: scholar
+  - name: GitHub
+    url: https://github.com/AsmaFariha
+    icon: github
+  - name: Email
+    url: mailto:asma.fariha.ahmad@gmail.com
+    icon: email
+

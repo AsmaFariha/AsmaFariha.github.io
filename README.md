@@ -1,26 +1,59 @@
-# Data Scientist
+# 🌟 Welcome to My Portfolio 🌟
 
-#### Technical Skills: Python, SQL, Azure, Machine Learning
+Hi, I’m **Asma Fariha**! A passionate **Data Scientist**, **Researcher**, and **Educator**, dedicated to building data-driven solutions that solve real-world problems.
 
-## Education						       		
-MASc, Electrical & Computer Engineering	| Ontario Tech University, Canada (_May 2024_)	 			        		
+---
 
-## Work Experience
-**Data Science Research Associate @ RTEMSoft Lab, Ontario Tech University, Canada (_June 2024 - Present_)**
+## 🖥️ **Technical Skills**
+- **Programming**: Python, SQL, Azure
+- **Machine Learning**: Random Forest, Gradient Boosting, LSTM
+- **Visualization**: Grafana, Tableau
+- **Tools**: Microsoft Azure, GitHub, Pandas, Scikit-learn
 
-Developing predictive solutions for Team Eagle Airfield operation software quality, hosted in the Azure cloud.
-- Machine learning model for time-series prediction on software quality metrics, such as random forest, gradient boosting, and LSTM with backtesting.
--	Developing Grafana and customized dashboard for reporting and visualization.  
+---
 
-**Machine Learning Analytics Research Assistant @ IBM CAS, Canada (_May 2023 - _April 2024)**
-Applied ML methods on a large-scale CI/CD dataset (approx. four million entries) to enhance test case prioritization technique. 
-- Accelerated machine learning runtime by 60% using advanced continual learning algorithms and demonstrated A/B testing outcomes using Python graph plot libraries.
-- Presented the novel technique results in the peer-reviewed [CCIW workshop] (https://conf.researchr.org/details/icst-2024/cciw-2024-papers/5/Replay-Based-Continual-Learning-for-Test-Case-Prioritization).
+## 🎓 **Education**
+- **Master of Applied Science (MASc)**, Electrical & Computer Engineering  
+  _Ontario Tech University, Canada (Expected May 2024)_  
+  - Coursework: Advanced Software Engineering, Real-Time Analytics, Trust in AI
 
-## Projects
+---
 
+## 💼 **Work Experience**
+### **Data Science Research Associate**  
+**RTEMSoft Lab, Ontario Tech University, Canada** (_June 2024 – Present_)  
+- Developed predictive solutions for **Team Eagle Airfield operation software quality** using ML models.  
+- Built a **time-series prediction system** for software quality metrics (e.g., Random Forest, Gradient Boosting, LSTM).  
+- Created **custom dashboards** for reporting and visualization, transitioning from Grafana to tailored solutions.  
 
-## Publications
-1. A. Fariha, S. Alwidian and A. Azim, "[Towards Requirements Specification Collaboration Forum for Embedded Software Systems](https://ieeexplore.ieee.org/abstract/document/10350761)," 2023 ACM/IEEE International Conference on Model Driven Engineering Languages and Systems Companion (MODELS-C), Västerås, Sweden, 2023, pp. 312-317, doi: 10.1109/MODELS-C59198.2023.00061.
-2. A. Fariha, S. Alwidian and A. Azim, "A Systematic Literature Review on Requirements Engineering and Maintenance for Embedded Software," in IEEE Access, vol. 12, pp. 114263-114279, 2024, doi: 10.1109/ACCESS.2024.3443271.
-3. S. Mostafi, A. Fariha, M. El-Darieby, K. Elgazzar and A. Azim, "A Novel Predictive Modelling Approach Towards a Spatiotemporal Traffic Safety Index," 2023 IEEE 26th International Conference on Intelligent Transportation Systems (ITSC), Bilbao, Spain, 2023, pp. 4373-4379, doi: 10.1109/ITSC57777.2023.10422420.
+### **Machine Learning Analytics Research Assistant**  
+**IBM CAS, Canada** (_May 2023 – April 2024_)  
+- Applied ML on a **large-scale CI/CD dataset** (~4M entries) to enhance test case prioritization.  
+- Accelerated ML runtime by 60% with **advanced continual learning** and **A/B testing**.  
+- Published findings in [CCIW Workshop](https://conf.researchr.org/details/icst-2024/cciw-2024-papers/5/Replay-Based-Continual-Learning-for-Test-Case-Prioritization).
+
+---
+
+## 📊 **Key Projects**
+1. **Predictive Bug Trends**: Built an ML-based predictive system with a low MAPE of 5% for software quality issues.
+2. **CI/CD Optimization**: Developed prioritization models that improved testing efficiency and accuracy.
+3. **Real-Time Anomaly Detection**: Achieved 100% accuracy for critical RTOS execution patterns using hybrid LSTM-CNN models.
+
+---
+
+## 📚 **Publications**
+1. **[Towards Requirements Specification Collaboration Forum for Embedded Software Systems](https://ieeexplore.ieee.org/abstract/document/10350761)**, 2023  
+2. **[A Systematic Literature Review on Requirements Engineering and Maintenance for Embedded Software](https://doi.org/10.1109/ACCESS.2024.3443271)**, 2024  
+3. **[A Novel Predictive Modelling Approach Towards a Spatiotemporal Traffic Safety Index](https://doi.org/10.1109/ITSC57777.2023.10422420)**, 2023  
+
+---
+
+## 🌐 **Connect With Me**
+- 💼 [LinkedIn](https://www.linkedin.com/in/asma-fariha)  
+- 📝 [Google Scholar](https://scholar.google.com/citations?user=WVkjT2YAAAAJ&hl=en)  
+- 🌟 [GitHub](https://github.com/AsmaFariha)  
+- 📧 [Email Me](mailto:asma.fariha.ahmad@gmail.com)  
+
+---
+
+✨ Let’s collaborate to make data-driven innovations happen!

@@ -47,8 +47,11 @@ Hi, I’m **Asma Fariha**! A passionate **Data Scientist**, **Researcher**, and 
 1. **Predictive Bug Trends**: Built an ML-based predictive system with a low MAPE of 5% for software quality issues.
 2. **CI/CD Optimization**: Developed prioritization models that improved testing efficiency and accuracy.
 3. **Real-Time Anomaly Detection**: Achieved 100% accuracy for critical RTOS execution patterns using hybrid LSTM-CNN models.
-4. **CodeSecureAI**: Built [Cloud application](https://github.com/AsmaFariha/CodeSecureAI) to detect security vulnerabilities in code written in different programming languages using prompt engineering, ChatGPT, and MongoDB. 
+4. **CodeSecureAI**: Built [Cloud application](https://github.com/AsmaFariha/CodeSecureAI) to detect security vulnerabilities in code written in different programming languages using prompt engineering, ChatGPT, and MongoDB.
+
+   
 ---
+
 
 ## 📚 **Publications**
 1. **[Towards Requirements Specification Collaboration Forum for Embedded Software Systems](https://ieeexplore.ieee.org/abstract/document/10350761)**, 2023  

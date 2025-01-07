@@ -2,7 +2,7 @@ title: "Asma Fariha"
 logo: "/assets/images/DSC08703.jpg"
 description: "Data Scientist | Machine Learning Enthusiast | Researcher | Educator"
 theme: "jekyll-theme-slate"
-show_downloads: true
+show_downloads: false
 footer_text: "Empowering insights through data and innovation."
 social_links:
   - name: LinkedIn

@@ -1,0 +1,7 @@
+# Ignore sensitive files
+*.env
+*.key
+secrets.json
+credentials.yml
+.DS_Store
+node_modules/

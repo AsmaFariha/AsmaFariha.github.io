@@ -58,6 +58,11 @@
       transition: background 0.4s ease, color 0.4s ease;
     }
 
+    /* film-grain texture for a crafted, non-template feel */
+    body::after { content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    [data-theme="dark"] body::after { opacity: 0.06; }
+
     .wrap { max-width: 1080px; margin: 0 auto; padding: 0 6vw; }
 
     h1, h2, h3, .exp-title, .feat-title { font-family: 'Space Grotesk', sans-serif; }
@@ -112,6 +117,9 @@
     .orb.a { width: 340px; height: 340px; background: radial-gradient(circle, var(--accent), transparent 70%); top: -120px; right: 4%; }
     .orb.b { width: 280px; height: 280px; background: radial-gradient(circle, var(--accent-2), transparent 70%); top: 40px; left: -60px; animation-delay: -6s; opacity: 0.32; }
     @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(-26px, 30px) scale(1.12); } }
+    .spotlight { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 0.5s ease;
+      background: radial-gradient(460px circle at var(--mx, 75%) var(--my, 22%), color-mix(in srgb, var(--accent) 20%, transparent), transparent 62%); }
+    header:hover .spotlight { opacity: 1; }
 
     .hero-inner { position: relative; z-index: 1; }
     .status {
@@ -169,19 +177,31 @@
 
     /* ── SECTIONS ───────────────────────────────── */
     section { padding: 56px 0; }
-    .section-label { display: flex; align-items: center; gap: 16px; margin-bottom: 34px; }
+    .section-label { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
+    .section-label .idx { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: var(--accent);
+      border: 1px solid var(--accent-ring); background: var(--accent-soft); border-radius: 7px; padding: 4px 9px; letter-spacing: 0.06em; }
     .section-label h2 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; }
-    .section-label .idx { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
-    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-label::after { content: ''; flex: 1; height: 7px;
+      background-image: radial-gradient(var(--border-strong) 1.1px, transparent 1.3px); background-size: 9px 9px; opacity: 0.85; }
 
     /* ── SUMMARY ────────────────────────────────── */
     .summary { font-size: 1.12rem; line-height: 1.8; color: var(--text-mid); max-width: 860px; }
-    .summary .hl { color: var(--text); font-weight: 600; background: var(--accent-soft); padding: 0 4px; border-radius: 4px; }
+    .summary .hl { color: var(--text); font-weight: 600; padding: 0 2px;
+      background-image: linear-gradient(transparent 58%, color-mix(in srgb, var(--accent) 22%, transparent) 58%);
+      -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
     /* ── SKILLS ─────────────────────────────────── */
     .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(236px, 1fr)); gap: 16px; }
     .skill-group { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 22px; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
     .skill-group:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--accent-ring); }
+    /* engineer-style corner brackets that snap onto cards on hover */
+    .skill-group { position: relative; }
+    .project-card::before, .skill-group::before, .project-card::after, .skill-group::after {
+      content: ''; position: absolute; width: 13px; height: 13px; border: 0 solid var(--accent); opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none; }
+    .project-card::before, .skill-group::before { top: 11px; left: 11px; border-top-width: 2px; border-left-width: 2px; transform: translate(5px,5px); }
+    .project-card::after, .skill-group::after { bottom: 11px; right: 11px; border-bottom-width: 2px; border-right-width: 2px; transform: translate(-5px,-5px); }
+    .project-card:hover::before, .skill-group:hover::before, .project-card:hover::after, .skill-group:hover::after { opacity: 0.55; transform: translate(0,0); }
     .skill-group-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
     .skill-tags { display: flex; flex-wrap: wrap; gap: 7px; }
     .tag { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; padding: 4px 10px; border-radius: 7px; background: var(--bg-soft); color: var(--text-mid); border: 1px solid var(--border); }
@@ -201,11 +221,12 @@
 
     .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; margin-bottom: 26px; }
     .flow-node {
-      flex: 1; min-width: 132px; background: var(--bg-soft); border: 1px solid var(--border);
-      border-radius: 12px; padding: 14px; text-align: center;
+      flex: 1 1 132px; min-width: 132px; background: var(--bg-soft); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 12px; min-height: 82px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; text-align: center;
     }
-    .flow-node .fn-t { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 3px; }
-    .flow-node .fn-s { font-size: 11px; color: var(--text-soft); font-family: 'JetBrains Mono', monospace; }
+    .flow-node .fn-t { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: var(--text); line-height: 1.2; }
+    .flow-node .fn-s { font-size: 10.5px; line-height: 1.4; color: var(--text-soft); font-family: 'JetBrains Mono', monospace; overflow-wrap: anywhere; max-width: 100%; }
     .flow-node.model { border-color: var(--accent-ring); background: var(--accent-soft); }
     .flow-arrow { display: grid; place-items: center; color: var(--accent); font-size: 18px; flex: 0 0 auto; }
     @media (max-width: 720px){ .flow-arrow { transform: rotate(90deg); } }
@@ -303,11 +324,11 @@
     <a href="#top" class="nav-brand">Asma<span>.</span>Fariha</a>
     <ul class="nav-links">
       <li><a href="#summary">About</a></li>
-      <li><a href="#skills">Skills</a></li>
       <li><a href="#featured">Featured</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#publications">Publications</a></li>
+      <li><a href="#skills">Skills</a></li>
       <li><a href="#education">Education</a></li>
     </ul>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">🌙</button>
@@ -319,6 +340,7 @@
   <div class="hero-bg"></div>
   <div class="orb a"></div>
   <div class="orb b"></div>
+  <div class="spotlight" id="spotlight"></div>
   <div class="wrap hero-inner">
     <div class="status"><span class="dot"></span> Currently @ Mercor — building the data systems behind frontier LLM training</div>
     <h1>Hi, I'm <span class="grad">Asma Fariha</span></h1>
@@ -326,7 +348,8 @@
     <p class="hero-sub">Research-backed AI engineer who ships LLM and agentic systems end-to-end — from data pipeline to deployed product.</p>
     <div class="hero-links">
       <a class="primary" href="https://github.com/AsmaFariha/french-coach-hackathon" target="_blank" rel="noopener">★ Featured Project</a>
-      <a href="mailto:asma.fariha.academic@gmail.com">✉ Email</a>
+      <a href="mailto:asma.fariha.ahmad@gmail.com">✉ Email</a>
+      <a href="mailto:asma.fariha.academic@gmail.com">🎓 Academic</a>
       <a href="https://www.linkedin.com/in/asma-fariha" target="_blank" rel="noopener">in LinkedIn</a>
       <a href="https://scholar.google.com/citations?user=WVkjT2YAAAAJ&hl=en" target="_blank" rel="noopener">⌕ Scholar</a>
       <a href="https://github.com/AsmaFariha" target="_blank" rel="noopener">⌥ GitHub</a>
@@ -350,40 +373,9 @@
     </p>
   </section>
 
-  <!-- SKILLS -->
-  <section id="skills" class="reveal">
-    <div class="section-label"><span class="idx">02</span><h2>Technical Skills</h2></div>
-    <div class="skills-grid">
-      <div class="skill-group">
-        <div class="skill-group-label">Languages &amp; Programming</div>
-        <div class="skill-tags">
-          <span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">React</span><span class="tag">Java</span><span class="tag">SQL</span><span class="tag">C++</span><span class="tag">Bash</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <div class="skill-group-label">ML &amp; AI</div>
-        <div class="skill-tags">
-          <span class="tag">PyTorch</span><span class="tag">TensorFlow</span><span class="tag">LLMs</span><span class="tag">Agentic Pipelines</span><span class="tag">RAG</span><span class="tag">Prompt Engineering</span><span class="tag">LSTM / CNN</span><span class="tag">XGBoost</span><span class="tag">CatBoost</span><span class="tag">Scikit-learn</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <div class="skill-group-label">MLOps &amp; Engineering</div>
-        <div class="skill-tags">
-          <span class="tag">Docker</span><span class="tag">CI/CD</span><span class="tag">Model Monitoring</span><span class="tag">Flask</span><span class="tag">Gradio</span><span class="tag">REST APIs</span><span class="tag">Azure</span><span class="tag">Git</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <div class="skill-group-label">Data &amp; Storage</div>
-        <div class="skill-tags">
-          <span class="tag">PostgreSQL</span><span class="tag">MongoDB</span><span class="tag">Snowflake</span><span class="tag">Pandas</span><span class="tag">Hex</span><span class="tag">Airtable</span><span class="tag">Feature Engineering</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- FEATURED -->
   <section id="featured" class="reveal">
-    <div class="section-label"><span class="idx">03</span><h2>Featured Project</h2></div>
+    <div class="section-label"><span class="idx">02</span><h2>Featured Project</h2></div>
     <div class="feat">
       <div class="feat-tagline">🇫🇷 Agentic LLM App · Self-hosted models</div>
       <div class="feat-title">French Coach</div>
@@ -395,9 +387,9 @@
         <div class="flow-arrow">→</div>
         <div class="flow-node"><div class="fn-t">spaCy NLP</div><div class="fn-s">gender · POS · offline</div></div>
         <div class="flow-arrow">→</div>
-        <div class="flow-node model"><div class="fn-t">Coach Agent</div><div class="fn-s">plan→generate→critique→revise</div></div>
+        <div class="flow-node model"><div class="fn-t">Coach Agent</div><div class="fn-s">plan · generate · critique · revise</div></div>
         <div class="flow-arrow">→</div>
-        <div class="flow-node model"><div class="fn-t">MiniCPM 8B + V</div><div class="fn-s">text + vision</div></div>
+        <div class="flow-node model"><div class="fn-t">MiniCPM&nbsp;8B&nbsp;+&nbsp;V</div><div class="fn-s">text + vision</div></div>
         <div class="flow-arrow">→</div>
         <div class="flow-node"><div class="fn-t">Supabase</div><div class="fn-s">Postgres</div></div>
       </div>
@@ -415,7 +407,7 @@
 
   <!-- EXPERIENCE -->
   <section id="experience" class="reveal">
-    <div class="section-label"><span class="idx">04</span><h2>Work Experience</h2></div>
+    <div class="section-label"><span class="idx">03</span><h2>Work Experience</h2></div>
     <div class="timeline">
 
       <div class="exp-item">
@@ -495,7 +487,7 @@
 
   <!-- PROJECTS -->
   <section id="projects" class="reveal">
-    <div class="section-label"><span class="idx">05</span><h2>More Projects</h2></div>
+    <div class="section-label"><span class="idx">04</span><h2>More Projects</h2></div>
     <div class="projects-grid">
       <div class="project-card">
         <h3>Log Anomaly Detection with LLMs</h3>
@@ -526,7 +518,7 @@
 
   <!-- PUBLICATIONS -->
   <section id="publications" class="reveal">
-    <div class="section-label"><span class="idx">06</span><h2>Publications</h2></div>
+    <div class="section-label"><span class="idx">05</span><h2>Publications</h2></div>
     <div class="pub-list">
       <div class="pub-item">
         <div class="pub-title"><a href="https://ieeexplore.ieee.org/abstract/document/10667308" target="_blank" rel="noopener">Log Anomaly Detection by Leveraging LLM-Based Parsing and Embedding with Attention Mechanism</a></div>
@@ -547,6 +539,37 @@
       <div class="pub-item">
         <div class="pub-title"><a href="https://ieeexplore.ieee.org/abstract/document/10350761" target="_blank" rel="noopener">Towards Requirements Specification Collaboration Forum for Embedded Software Systems</a></div>
         <div class="pub-meta">IEEE · 2023</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="reveal">
+    <div class="section-label"><span class="idx">06</span><h2>Technical Skills</h2></div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-label">Languages &amp; Programming</div>
+        <div class="skill-tags">
+          <span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">React</span><span class="tag">Java</span><span class="tag">SQL</span><span class="tag">C++</span><span class="tag">Bash</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">ML &amp; AI</div>
+        <div class="skill-tags">
+          <span class="tag">PyTorch</span><span class="tag">TensorFlow</span><span class="tag">LLMs</span><span class="tag">Agentic Pipelines</span><span class="tag">RAG</span><span class="tag">Prompt Engineering</span><span class="tag">LSTM / CNN</span><span class="tag">XGBoost</span><span class="tag">CatBoost</span><span class="tag">Scikit-learn</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">MLOps &amp; Engineering</div>
+        <div class="skill-tags">
+          <span class="tag">Docker</span><span class="tag">CI/CD</span><span class="tag">Model Monitoring</span><span class="tag">Flask</span><span class="tag">Gradio</span><span class="tag">REST APIs</span><span class="tag">Azure</span><span class="tag">Git</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">Data &amp; Storage</div>
+        <div class="skill-tags">
+          <span class="tag">PostgreSQL</span><span class="tag">MongoDB</span><span class="tag">Snowflake</span><span class="tag">Pandas</span><span class="tag">Hex</span><span class="tag">Airtable</span><span class="tag">Feature Engineering</span>
+        </div>
       </div>
     </div>
   </section>
@@ -638,6 +661,17 @@
       entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } });
     }, { threshold: 0.12 });
     els.forEach(function (e) { io.observe(e); });
+  })();
+
+  // ── Hero cursor spotlight ─────────────────────
+  (function () {
+    var h = document.querySelector('header'), sp = document.getElementById('spotlight');
+    if (!h || !sp || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches)) return;
+    h.addEventListener('pointermove', function (e) {
+      var r = h.getBoundingClientRect();
+      sp.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      sp.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
   })();
 </script>
 

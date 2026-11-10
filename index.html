@@ -44,7 +44,9 @@ h1,h2,h3,h4{font-family:"Poppins",sans-serif;color:var(--heading);line-height:1.
 
 /* Hero */
 #hero{min-height:100vh;display:flex;align-items:center;position:relative;
-  background:linear-gradient(120deg,rgba(11,37,69,.92),rgba(15,111,222,.55)),url("assets/images/DSC08703.jpg") center/cover no-repeat;color:#fff}
+  background:radial-gradient(circle at 75% 30%,#1b4f9c 0%,transparent 55%),radial-gradient(circle at 15% 85%,#3b2a7a 0%,transparent 50%),linear-gradient(135deg,#071426,#0b2545 60%,#0d3366);color:#fff;overflow:hidden}
+#net{position:absolute;inset:0;width:100%;height:100%}
+#hero .inner{position:relative;z-index:1}
 #hero .inner{padding:0 16px 0 120px;max-width:1100px}
 #hero .tag{display:inline-block;padding:6px 14px;border:1px solid rgba(255,255,255,.4);border-radius:30px;font-size:13px;margin-bottom:22px;backdrop-filter:blur(4px)}
 #hero h1{color:#fff;font-size:clamp(40px,7vw,68px);font-weight:700}
@@ -157,6 +159,7 @@ footer{text-align:center;padding:28px 16px;color:var(--muted);font-size:14px;bor
 </nav>
 
 <header id="hero">
+  <canvas id="net" aria-hidden="true"></canvas>
   <div class="inner">
     <span class="tag">Currently @ Mercor — building the data systems behind frontier LLM training</span>
     <h1>Asma Fariha</h1>
@@ -316,6 +319,17 @@ footer{text-align:center;padding:28px 16px;color:var(--muted);font-size:14px;bor
 <footer>© 2026 Asma Fariha · Built &amp; hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></footer>
 
 <script>
+(function(){
+  var c=document.getElementById('net'),x=c.getContext('2d'),pts=[],W,H,still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){var r=devicePixelRatio||1;W=c.offsetWidth;H=c.offsetHeight;c.width=W*r;c.height=H*r;x.setTransform(r,0,0,r,0,0);
+    var n=Math.min(90,Math.round(W*H/16000));pts=[];for(var i=0;i<n;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35});}
+  function draw(){x.clearRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++){var p=pts[i];if(!still){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;}
+      for(var j=i+1;j<pts.length;j++){var q=pts[j],d=Math.hypot(p.x-q.x,p.y-q.y);if(d<140){x.strokeStyle='rgba(143,193,255,'+(1-d/140)*.35+')';x.lineWidth=1;x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.stroke();}}
+      x.fillStyle='rgba(180,215,255,.85)';x.beginPath();x.arc(p.x,p.y,2,0,7);x.fill();}
+    if(!still)requestAnimationFrame(draw);}
+  size();draw();addEventListener('resize',function(){size();if(still)draw();});
+})();
 (function(){
   var root=document.documentElement,btn=document.getElementById('themeBtn');
   try{var t=localStorage.getItem('theme');if(t)root.setAttribute('data-theme',t);}catch(e){}

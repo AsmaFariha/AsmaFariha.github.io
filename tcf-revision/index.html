@@ -1,0 +1,561 @@
+<title>TCF Topic Sheet</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: one reading column; sticky tab bar (Oral / Écrit / Glossaire) + search; families as collapsible blocks */
+:root{
+  --bg:#f6f7fb; --card:#ffffff; --fg:#1b2033; --muted:#5d6480; --line:#dfe2ee;
+  --accent:#2f4fd8; --hot:#c2410c; --hotbg:#fff1e8; --chip:#eef1fb;
+  --display:"Space Grotesk",system-ui,sans-serif; --body:Inter,system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12141c; --card:#1b1e29; --fg:#e7e9f2; --muted:#9aa1bb; --line:#2c3142;
+  --accent:#8ea2ff; --hot:#ff9a5c; --hotbg:#3a2418; --chip:#252a3a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12141c; --card:#1b1e29; --fg:#e7e9f2; --muted:#9aa1bb; --line:#2c3142;
+  --accent:#8ea2ff; --hot:#ff9a5c; --hotbg:#3a2418; --chip:#252a3a; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:820px;margin:0 auto;padding-block:20px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-family:var(--display);font-size:1.7rem;margin:0 0 4px;text-wrap:balance}
+.lede{color:var(--muted);margin:0 0 14px;max-width:65ch}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:8px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+.tab{font:600 14px var(--body);border:1px solid var(--line);background:var(--card);color:var(--fg);padding:7px 14px;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.tab:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#q{flex:1 1 180px;min-width:0;font:14px var(--body);padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.legend{font-size:13px;color:var(--muted);margin:10px 0 0}
+.legend b{color:var(--hot)}
+details.fam{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-top:12px}
+details.fam>summary{cursor:pointer;padding:12px 14px;font-family:var(--display);font-weight:700;font-size:1.1rem;list-style:none;display:flex;justify-content:space-between;gap:8px}
+details.fam>summary::after{content:"+";color:var(--muted)}
+details.fam[open]>summary::after{content:"−"}
+.fam .en{font-family:var(--body);font-weight:400;font-size:.85rem;color:var(--muted)}
+.task{padding:0 14px 12px}
+.task h3{font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:8px 0 6px}
+ul{margin:0;padding:0;list-style:none}
+li{padding:7px 0;border-top:1px solid var(--line)}
+li:first-child{border-top:0}
+.fr{font-weight:500}
+.tr{color:var(--muted);font-size:.9rem}
+li.hot .fr::before{content:"★ ";color:var(--hot)}
+li.hot{background:linear-gradient(90deg,var(--hotbg),transparent 70%)}
+.v{display:inline-block;font-size:12px;background:var(--chip);border-radius:4px;padding:1px 6px;margin:3px 4px 0 0}
+.gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 14px;padding:0 14px 14px}
+.gl div{border-top:1px solid var(--line);padding-top:5px;min-width:0}
+.gl b{font-weight:600}
+.src{display:inline-block;font:600 11px var(--body);color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:0 5px;margin:3px 4px 0 0}
+.empty{color:var(--muted);padding:20px 0}
+</style>
+
+<div class="wrap">
+<h1>TCF Canada topic sheet</h1>
+<p class="lede">All four of your question banks (≈1,350 questions) merged into unique question types. Each line is one idea that came up many times with different wording. Read the French, check the meaning, and use the word chips as your vocabulary list.</p>
+<div class="bar" role="tablist">
+  <button class="tab" role="tab" data-t="topics">By topic</button>
+  <button class="tab" role="tab" data-t="oral">Oral</button>
+  <button class="tab" role="tab" data-t="ecrit">Écrit</button>
+  <button class="tab" role="tab" data-t="gloss">Tricky words</button>
+  <input id="q" type="search" placeholder="Search (e.g. sieste, voiture, nap)">
+</div>
+<p class="legend"><b>★</b> = asked many times (high priority). Oral: Tâche 3 = give your opinion, Tâche 2 = ask questions in a role-play. Écrit: T1 = 60–120-word message, T2 = 120–150-word story/blog, T3 = argue from two documents.</p>
+<div id="out"></div>
+</div>
+
+<script>
+// Item syntax: "*" prefix = frequent; "FR | EN | vocab1, vocab2"
+const D={
+oral:[
+["Famille, enfants et relations","Family, children, relationships",{
+"Tâche 3":[
+"*Faut-il de l'autorité / de la sévérité pour bien élever un enfant ?|Is authority/strictness needed to raise a child well?|élever, l'autorité, sévère, laxiste, fixer des limites",
+"*Vivre seul ou en famille ? Peut-on être heureux/épanoui seul ou célibataire ?|Living alone vs with family; can you be happy single?|célibataire, la solitude, épanoui, isolé",
+"*Les jeunes adultes qui restent chez leurs parents|Young adults who keep living with their parents|le loyer, l'indépendance, autonome, le cocon familial",
+"*Donner de l'argent aux enfants pour leurs bonnes notes|Paying children for good school results|récompenser, la motivation, les notes",
+"*Les animaux de compagnie (pour les personnes âgées, le bonheur, trop de place ?)|Pets: good for elderly people? make us happier? too important?|un animal de compagnie, la compagnie, s'occuper de",
+"L'éducation identique pour filles et garçons|Same upbringing for girls and boys|l'égalité, les stéréotypes",
+"Surveiller les amis de ses enfants|Should parents monitor their children's friends?|surveiller, les fréquentations, la confiance",
+"Choisir de ne pas avoir d'enfants|Choosing not to have children|un choix de vie, la liberté",
+"Amitié : faut-il des amis pour être heureux ? grande famille ou vrais amis ? la famille = nos meilleurs amis ?|Friendship vs family|un ami proche, les liens",
+"Une amitié durable avec quelqu'un de très différent / de convictions opposées|Lasting friendship with very different people|les convictions, la tolérance",
+"Faut-il dire toute la vérité aux enfants ?|Should we always tell children the whole truth?|mentir, protéger",
+"Les prestations sociales réduisent-elles la solidarité familiale ?|Do welfare benefits reduce family solidarity?|les prestations sociales = welfare payments, l'entraide",
+"Les personnes âgées donnent des conseils utiles|Older people give useful advice|les aînés, l'expérience, la sagesse",
+"La solitude au quotidien ; garder ses projets secrets|Everyday loneliness; keeping your plans secret|se sentir seul"],
+"Tâche 2":[
+"*Garder l'animal / l'enfant d'un voisin pendant ses vacances ou le week-end|Looking after a neighbour's pet or child|nourrir, les horaires, les habitudes",
+"*Trouver une baby-sitter / nounou / garde d'enfants|Finding a babysitter|la garde d'enfants, le tarif, l'expérience",
+"*Anniversaire : organiser une fête, choisir un cadeau, la fête que j'ai ratée|Birthdays: party, gift, a party you missed|le gâteau, les invités, le lieu",
+"*Mariage ou célébration au Québec/Canada (comparer avec mon pays)|Wedding or celebration in Quebec/Canada|la cérémonie, la tenue, les traditions",
+"Sortie familiale du dimanche ; occuper ses neveux ; camps de vacances pour enfants|Family outing; keeping nephews busy; holiday camps|",
+"Adopter un animal (animalerie) ; animal perdu ; colocataire qui veut un animal|Adopting / losing a pet|une animalerie = pet shop",
+"Louer la salle des fêtes de la mairie|Renting the town party hall|la salle des fêtes, la caution"]}],
+["Éducation, études et langues","Education, studies, languages",{
+"Tâche 3":[
+"*Faut-il de longues études pour réussir / gagner un bon salaire ? La réussite scolaire garantit-elle le succès ?|Are long studies needed to succeed / earn well?|un diplôme, les études supérieures, la réussite",
+"*Reprendre ses études à tout âge|Going back to school at any age|se reconvertir, la formation continue",
+"Les arts (musique, dessin, théâtre) à l'école|Should arts be part of school?|les matières artistiques, la créativité",
+"Quelle matière préférée / quelles matières ajouter ? Le rôle de l'école = seulement les matières ?|Favourite subject; what school should teach|une matière, le programme scolaire",
+"Travailler pour payer ses études ; étudier et travailler en même temps|Working to pay for studies|les frais de scolarité, un petit boulot",
+"L'école à la maison (instruction en famille)|Homeschooling|enseigner à domicile, la socialisation",
+"Langues : plus facile pour les jeunes ? difficile ? utile d'en parler plusieurs ? dès l'enfance ?|Learning foreign languages|bilingue, la langue maternelle",
+"Enseigner les technologies (Internet, réseaux sociaux) à l'école|Teaching technology at school|",
+"Financer les universités ; université sans sélection|University funding / no selection|la sélection, les financements",
+"Diversité à l'école et tolérance ; égalité des chances|School diversity; equal opportunity|l'égalité des chances",
+"Sorties pédagogiques (musées, zoos)|School trips|une sortie scolaire"],
+"Tâche 2":[
+"*Inscrire ses enfants à l'école au Canada|Enrolling your children in a Canadian school|l'inscription, les horaires, la cantine",
+"*Cours de français / de langue (professeur, école de langues, université, payés par l'entreprise)|Taking French or language classes|le niveau, le tarif, la durée",
+"*Activité pour les enfants après l'école|After-school activity for children|le parascolaire",
+"Séjour linguistique à l'étranger|Language-learning trip abroad|",
+"Formation professionnelle / formation du soir / cours à distance|Vocational, evening or distance course|une formation, à distance",
+"Étudier à l'université au Canada (Toronto…)|Studying at a Canadian university|le logement étudiant, les frais",
+"Fête de l'école ; jeu à l'école de langues|School party; game at language school|"]}],
+["Travail et carrière","Work and career",{
+"Tâche 3":[
+"*Travailler jusqu'à 70 ans ? Jusqu'à quel âge ? Le travail des seniors est-il utile ?|Working until 70; older workers|la retraite, les seniors, l'espérance de vie",
+"*Le salaire est-il la principale motivation ?|Is salary the main motivation?|le salaire, la reconnaissance, l'ambiance",
+"*Changer de métier à tout âge ; avoir plusieurs métiers dans une carrière|Changing careers at any age|se reconvertir, la reconversion",
+"*Travailler sous un chef homme ou femme ; équipe d'hommes ou de femmes|Male or female boss|le/la supérieur(e), la parité",
+"*Bien-être des salariés et efficacité ; se reposer au travail (la sieste)|Employee well-being; resting at work (naps)|la sieste = nap, la productivité, épuisé",
+"Les métiers difficiles mieux payés ? Le même salaire pour tous ?|Pay for hard jobs; equal pay for all|la pénibilité, l'égalité salariale",
+"Aimer son métier pour réussir ; le bonheur au travail est-il l'essentiel ?|Loving your job; happiness at work|l'épanouissement",
+"Le télétravail : une amélioration ? meilleur équilibre ? l'obliger ? le réduire ?|Remote work|le télétravail, l'équilibre vie pro/vie perso",
+"Ne pas travailler avec ses proches|Not working with family/friends|",
+"Les jeunes et l'emploi : plus difficile ? que faire ? expérience ou diplômes ?|Young people finding work; experience vs degrees|un stage, l'expérience",
+"Les métiers artistiques sont-ils de vrais emplois ?|Are arts jobs real jobs?|",
+"Tout le monde peut-il être responsable/chef ?|Can anyone be a manager?|diriger, le leadership",
+"Intégrer les nouveaux salariés ; formation continue|Onboarding; ongoing training|l'intégration",
+"Réduire le temps de travail ; ceux qui ne font que travailler|Shorter working hours; workaholics|",
+"Faut-il être beau pour réussir ? La tenue au travail|Looks and clothes at work|l'apparence",
+"Métier de professeur ; professions plus utiles ; vivre de sa passion ; obéir à son supérieur|Teaching; useful jobs; earning from a passion; obeying your boss|"],
+"Tâche 2":[
+"*Nouveau dans l'entreprise : connaître l'entreprise / un nouveau collègue|New at the company|les horaires, la pause, l'équipe",
+"*Préparer un entretien d'embauche|Preparing a job interview|un entretien, le CV",
+"*Changer d'emploi / première journée d'un ami / changer de service|Changing jobs; a friend's first day|",
+"*Horaires et rythme de travail au Canada / au Québec|Work hours and pace in Canada|les congés, les heures supplémentaires",
+"Service d'aide à l'emploi ; job d'été au Canada|Job centre; summer job|",
+"Le télétravail d'un collègue|A colleague's remote work|",
+"Fête de retraite / de promotion ; dîner entre collègues|Retirement or promotion party|",
+"Formation au Québec ; mission à l'étranger|Training in Quebec; posting abroad|",
+"Postuler dans un restaurant / une boutique ; ouvrir son magasin|Applying to a restaurant/shop job|"]}],
+["Technologie, Internet et écrans","Technology, Internet, screens",{
+"Tâche 3":[
+"*Interdire le portable aux enfants / à l'école / au travail|Banning phones for kids, at school, at work|le téléphone portable, la dépendance",
+"*Les jeux vidéo : nuisibles ou utiles pour les enfants ?|Video games: harmful or helpful for children?|la violence, la concentration, la réflexion",
+"*Les écrans : risques, enfants trop devant|Screen time risks|les écrans, la sédentarité, le sommeil",
+"*Grâce à la technologie, on n'aura plus besoin de travailler|Technology will make work unnecessary|l'intelligence artificielle, les robots",
+"*On n'écrit plus de lettres ni de cartes|Nobody writes letters/cards any more|une carte de vœux",
+"Internet et les enfants : l'interdire ? les réseaux sociaux ? l'éducation ?|Internet and children|le contrôle parental",
+"Vivre sans technologie / Internet / portable ? Le portable est-il indispensable ?|Living without tech|indispensable",
+"Internet = un village global ; on reçoit plus d'informations ; confiance dans le web|Internet makes the world a village; information|les fausses informations",
+"Réseaux sociaux : amitiés plus faciles ? solitude ? perte de temps ? vie privée ?|Social media effects|la vie privée, isolé",
+"Internet a-t-il changé le travail ? rend-il la vie plus facile / plus heureuse ?|Internet and work, happiness|",
+"Relations à distance ; tout apprendre seul en ligne|Long-distance relationships; self-learning online|",
+"Tout acheter en ligne ; disparition des magasins ; avis en ligne|Online shopping; online reviews|les achats en ligne",
+"Voyages dans l'espace trop chers et inutiles|Space travel is too expensive|le tourisme spatial",
+"Pourquoi change-t-on souvent de téléphone ?|Why do people replace phones often?|l'obsolescence"],
+"Tâche 2":[
+"Plateforme de sorties en groupe ; créer un blog ; vendre en ligne|Group-outing app; blogging; selling online|",
+"Premier smartphone pour un enfant ; acheter un ordinateur|First phone for a child; buying a computer|"]}],
+["Culture, médias et loisirs","Culture, media, leisure",{
+"Tâche 3":[
+"*La télévision : indispensable à l'éducation ? peut-on vivre sans ? temps perdu ? influence sur les jeunes ?|Television and children; life without TV|la télé-réalité, les émissions",
+"*Les livres ont-ils perdu leur utilité ? Lire pour être cultivé ?|Are books still useful?|la lecture, cultivé",
+"La culture gratuite pour tous (musées, spectacles)|Free culture for everyone|la gratuité",
+"Les infos : images violentes ? ne plus regarder les actualités ? s'informer chaque jour ? quel média ?|News: violent images, avoiding news|les actualités, le journal télévisé",
+"Théâtre ou cinéma ?|Theatre or cinema?|",
+"Les célébrités : en politique ? pourquoi s'intéresse-t-on à leur vie ?|Celebrities in politics; celebrity culture|la presse people"],
+"Tâche 2":[
+"*Ami(e) spectateur d'une émission de télé|A friend who was in a TV studio audience|",
+"*S'inscrire à la bibliothèque / ludothèque|Joining the library / toy library|une ludothèque = toy/game library",
+"*Un film, un livre, une série : se renseigner ou écrire un article|A film, book or series|",
+"*Cours : théâtre, danse, musique, piano, guitare, dessin, photo|Classes: theatre, dance, music, drawing, photo|",
+"Centre culturel / de loisirs / service culturel de la mairie|Cultural or leisure centre|",
+"Musée, zoo, parc d'attractions en famille|Museum, zoo, theme park|",
+"Festival, concert, spectacle (billets donnés par un collègue)|Festival, concert, show tickets|",
+"Club de jeux de société ; sortie ce soir ; pique-nique ; concours de cuisine|Board games; going out; picnic; cooking contest|"]}],
+["Santé, alimentation et sport","Health, food, sport",{
+"Tâche 3":[
+"*Le stress peut-il motiver ? Peut-on combattre le stress ?|Can stress motivate you?|le stress, la pression",
+"*Devenir végétarien ; arrêter la viande pour la santé|Becoming vegetarian|végétarien, les protéines",
+"*Se passer de médicaments|Living without medicine|les médecines douces",
+"*Les régimes des magazines pour maigrir|Magazine weight-loss advice|maigrir, un régime",
+"Les produits bio : bénéfiques ? pour les riches ? seulement du bio ?|Organic food|bio, les pesticides",
+"La cuisine de votre pays ; la cuisine fait connaître un pays ; les habitudes alimentaires changent ; cuisine-t-on encore ?|Food culture and eating habits|",
+"Le sport et les enfants : les forcer ? les compétitions ? inciter au sport ? sport après 50 ans ?|Sport for kids and adults|",
+"Interdire le tabac et l'alcool|Ban tobacco and alcohol?|",
+"Soins médicaux gratuits ; consultations à distance|Free healthcare; online doctor visits|la téléconsultation"],
+"Tâche 2":[
+"*S'inscrire dans un club / une salle de sport / piscine / yoga|Joining a gym, pool or yoga class|l'abonnement, les horaires",
+"*Organiser un anniversaire ou dîner au restaurant|Birthday or dinner at a restaurant|réserver, le menu",
+"*Cours de cuisine / pâtisserie ; chef à domicile ; spécialités québécoises|Cooking classes; private chef|",
+"Natation, course à pied, randonnée, ski de fond, jogging, partenaire de sport|Swimming, running, hiking, cross-country skiing|le ski de fond = cross-country skiing",
+"Se sentir malade dans un nouveau pays ; rendez-vous médical ; assistant du médecin|Being ill abroad; doctor's appointment|un médecin de famille",
+"Compétition sportive d'un ami ; collègue accidenté|A friend's competition; injured colleague|",
+"Producteur de fruits et légumes bio ; végétarien au Canada|Organic farmer; vegetarian in Canada|"]}],
+["Transport et déplacements","Transport",{
+"Tâche 3":[
+"*Transports en commun gratuits pour tous|Free public transport|les transports en commun",
+"*Vivre sans voiture aujourd'hui|Living without a car|",
+"*Interdire les voitures dans les centres-villes|Banning cars in city centres|la pollution, les bouchons",
+"Pourquoi voyager en train, avion ou bus ?|Why travel by train, plane or bus?|"],
+"Tâche 2":[
+"*Se déplacer dans une nouvelle ville / transports publics|Getting around a new city|un abonnement, une carte de transport",
+"*Louer une voiture / un vélo|Renting a car or bike|le permis, l'assurance",
+"Acheter le vélo électrique / la voiture d'un ami|Buying a friend's e-bike or car|",
+"Panne de voiture (assurance) ; assurance auto ; auto-école|Breakdown; car insurance; driving school|une panne, l'auto-école",
+"Covoiturage avec un voisin ; aller au travail à vélo ; chercher des parents à l'aéroport|Carpooling; cycling to work; airport pickup|le covoiturage = carpool"]}],
+["Voyages et tourisme","Travel and tourism",{
+"Tâche 3":[
+"*Le tourisme aide-t-il le développement des pays ?|Does tourism help countries develop?|l'économie, les emplois",
+"*Voyager seul|Travelling alone|en solo, la liberté, la sécurité",
+"Connaître un pays par les livres / sans voyager|Knowing a country without travelling|",
+"Trop de tourisme dans certaines villes|Overtourism|le surtourisme",
+"Voyager transforme ; les voyages sont-ils bénéfiques ?|Travel changes you|l'ouverture d'esprit",
+"Voyager est réservé aux riches ?|Is travel only for the rich?|",
+"L'anglais pour voyager ; visiter sans parler la langue|English for travel|",
+"Que conseiller à un étranger dans votre pays ? Les artistes d'un pays ; voyager sans photos|Recommending your country; travel without photos|"],
+"Tâche 2":[
+"*Agence de voyages : vacances, Canada, mer, sports d'hiver, croisière, voyage gagné|Travel agency: plan a holiday|le séjour, l'hébergement, le budget",
+"*Office de tourisme : week-end pas cher, parc à thème, région, visite de ville|Tourist office questions|",
+"*Ami/collègue qui revient d'un séjour (mer, montagne, ski, région)|A friend back from a trip|",
+"*Louer un chalet / une maison de vacances|Renting a cottage/holiday home|un chalet",
+"Hôtel, chambre d'hôtes, camping|Hotel, B&B, campsite|une chambre d'hôtes = B&B",
+"Recevoir des amis qui ne connaissent pas votre ville|Hosting friends in your city|",
+"Voyage organisé ; train en retard ; journée à la campagne ; ferme pédagogique|Group tour; delayed train; countryside day|"]}],
+["Immigration et vie à l'étranger","Immigration and living abroad",{
+"Tâche 3":[
+"*Vivre à l'étranger est-il difficile ? S'installer demande du courage|Is living abroad hard?|s'installer, le mal du pays",
+"*Trouver un emploi à l'étranger / au Canada ; l'expérience à l'étranger aide-t-elle la carrière ?|Finding work abroad|les diplômes reconnus, le réseau",
+"*S'adapter jeune ; meilleur âge pour partir ; les enfants s'intègrent-ils facilement ?|Best age to emigrate; children integrating|",
+"*Une expérience à l'étranger apporte toujours des avantages|Living abroad is always positive|",
+"*La langue : vivre sans la parler ? suffit-elle pour s'intégrer ? l'apprendre avant ? quelle langue parler aux enfants ?|Language and integration|maîtriser, la langue d'accueil",
+"*Faut-il vivre dans un pays pour comprendre sa culture ?|Must you live somewhere to understand it?|",
+"*Faire des amis à l'étranger ; fréquenter ses compatriotes ; connaître les habitants|Making friends abroad|les compatriotes",
+"S'intégrer ou garder sa culture ? Adapter son mode de vie ? Renoncer à ses traditions ?|Integration vs keeping your culture|les traditions, s'adapter",
+"Pourquoi partir ? choix imposé ? quitter son pays est-il facile ? revenir au pays ?|Why people emigrate|le pays d'origine",
+"Les immigrants apportent beaucoup ; mesures d'intégration ; c'est au pays d'accueil d'aider ?|Immigrants' contribution; integration policy|le pays d'accueil",
+"Partir seul ou en famille ; trois choses avant d'immigrer|Going alone or with family|"],
+"Tâche 2":[
+"*Rencontrer de nouvelles personnes au Canada|Meeting people in Canada|",
+"*Sondage : activités du week-end au Canada|Survey on Canadian weekend activities|",
+"Ami installé au Québec ; collègue qui a vécu à Ottawa ; association franco-canadienne|People who already moved|",
+"Nouvel An au Canada ; culture canadienne ; démarches à la mairie|New Year in Canada; town hall paperwork|"]}],
+["Environnement et écologie","Environment",{
+"Tâche 3":[
+"*Économie et environnement : compatibles ?|Can the economy grow and protect nature?|le développement durable",
+"Les zoos sont-ils utiles ?|Are zoos useful?|la captivité, la conservation",
+"Tourisme et protection de la nature|Tourism vs nature|",
+"Déchets et tri ; petits gestes ; économiser eau et électricité|Waste, recycling, small daily actions|le tri des déchets",
+"Espèces en voie de disparition ; énergies renouvelables ; produits locaux de saison|Endangered species; renewables; local food|",
+"Éducation à l'environnement ; limiter les voyages en avion|Eco-education; limiting flights|"],
+"Tâche 2":[
+"Jardinage dans le quartier ; bénévolat pour l'environnement|Community gardening; eco volunteering|"]}],
+["Logement, ville et vie quotidienne","Housing, city, daily life",{
+"Tâche 3":[
+"Vivre en ville = stress ? Ville ou campagne (pour les âgés, la santé, le plaisir) ?|City vs countryside|la vie rurale / urbaine",
+"Les tâches ménagères|Household chores|le ménage"],
+"Tâche 2":[
+"*Le voisin dans l'ascenseur : découvrir le quartier / l'immeuble|Meeting a neighbour in the lift|le quartier, les commerces",
+"*Acheter les meubles d'un voisin qui déménage|Buying a neighbour's furniture|le mobilier",
+"*Colocation (chambre chez un collègue, ami, invités du colocataire)|Flat-sharing|la colocation, le loyer, les charges",
+"*Agence immobilière : louer / acheter / louer pour les vacances|Estate agent: rent or buy|un agent immobilier, le loyer",
+"*Fête entre voisins de l'immeuble|Building party with neighbours|",
+"Surveiller l'appartement d'un ami ; aider à déménager ; objets lourds à transporter|House-sitting; moving help|déménager, emménager",
+"Travaux dans le logement ; livraison de meuble ; envoyer un colis ; courses livrées|Renovation; deliveries; parcels|",
+"Ancien locataire ; vendre son logement ; trouver un locataire|Former tenant; selling or renting out|le locataire = tenant",
+"Faire ses achats à Montréal ; vêtements de seconde main ; déguisement ; location d'outils ; aide ménagère|Shopping; second-hand; costume; tool rental|",
+"Sac volé ; choisir un quartier ; quitter la ville pour la campagne|Stolen bag; choosing a neighbourhood|"]}],
+["Société, argent et engagement","Society, money, volunteering",{
+"Tâche 3":[
+"*Améliorer son apparence ; paraître jeune ; chirurgie esthétique ; refuser de vieillir|Appearance, cosmetic surgery, staying young|la chirurgie esthétique, l'image",
+"*Salaires excessifs des sportifs professionnels|Pro athletes' salaries|",
+"*Parité hommes-femmes en politique ; journée des droits des femmes|Gender parity; Women's Day|la parité",
+"*Faut-il de l'argent pour être heureux ?|Does money buy happiness?|",
+"L'État : limites de son contrôle ; liberté d'expression ; caméras dans les lieux publics|State control; free speech; CCTV|la vidéosurveillance",
+"Les jeunes : moins respectueux ? mal vus ? plus optimistes ? moins engagés ?|How young people are seen|",
+"Bénévolat ; qui doit aider les pauvres (État, citoyens, ONG) ? action humanitaire ; engagement citoyen|Volunteering; helping the poor|le bénévolat, une ONG",
+"Interdire les jeux d'argent et de hasard|Ban gambling?|les jeux de hasard = gambling",
+"Consommation dans les pays riches ; trop d'achats (vêtements, téléphones) ; publicité ; mode ; seconde main|Consumerism, ads, fashion|la surconsommation",
+"Enjeux et problèmes mondiaux ; monde sans frontières ; place des personnes handicapées ; gentillesse ; politique|Global issues, borders, disability|"],
+"Tâche 2":[
+"*Rejoindre une association (sans-abri, animaux, personnes âgées, multiculturelle, maison des associations)|Joining a charity or association|l'adhésion, les missions, la disponibilité"]}]
+],
+ecrit:[
+["Famille, amis & célébrations","",{
+"T1 Message":[
+"*Inviter des amis à mon anniversaire (restaurant, surprise pour un ami, demander de l'aide)|Invite friends to a birthday: place, date, help|",
+"*Dire à mes amis quels cadeaux je souhaite|Tell friends what gift you'd like|",
+"*Fête de fin d'année : inviter (date, lieu, programme)|Year-end party invitation|",
+"*Mariage au Château : expliquer à Cédric comment venir|Explain how to reach your wedding venue|l'itinéraire, l'accès",
+"Inviter un ami pour une journée / un week-end ; proposer un lieu de pique-nique|Invite a friend for a day; picnic spot|"],
+"T2 Récit":[
+"*Raconter une fête de famille / un événement marquant (concours « la plus belle fête »)|Tell the story of a family celebration|",
+"Accueillir un étudiant étranger une semaine (blog)|Hosting a foreign student|"],
+"T3 Débat":[
+"*Sévérité / autorité des parents (exigeants ou permissifs, contrôle parental)|Strict vs permissive parents|",
+"*Animaux de compagnie pour les enfants|Pets for children|",
+"Vivre chez ses parents / vivre seul ou en famille|Living with parents|"]}],
+["Éducation & apprentissage","",{
+"T1 Message":[
+"*Un ami veut suivre des cours dans mon école de langues|Friend wants to join your language school|",
+"*Répondre à une annonce : aide / échange linguistique pour apprendre le français|Answer a language-exchange ad|",
+"Ma nouvelle université (répondre à Alex)|Describe your new university|",
+"Les professeurs organisent une rencontre sur les métiers|Teachers organise a careers meeting|"],
+"T2 Récit":[
+"*Mon expérience d'apprentissage d'une langue (blog/forum)|Your experience learning a language|",
+"*Études à l'étranger : conseils à une étudiante de 19 ans / blog|Studying abroad advice|",
+"Formations en ligne : mon expérience|Online courses experience|",
+"Début à l'université de Montréal ; échange scolaire ; journée d'accueil|Starting university; school exchange|"],
+"T3 Débat":[
+"*Nouvelles technologies à l'école|Tech at school|",
+"*Uniforme scolaire|School uniform|",
+"*Devoirs à la maison|Homework|",
+"Caméras de surveillance à l'école ; école privée ou publique|CCTV at school; private vs public school|",
+"Cours de langue en ligne ; école à domicile ; reprendre ses études adulte|Online language classes; homeschooling|"]}],
+["Travail & carrière","",{
+"T1 Message":[
+"*Annoncer mon nouveau travail / répondre à Ali « comment ça se passe ? »|Announce or describe your new job|",
+"*Présenter les nouveaux locaux de l'entreprise à Lucas|Describe your company's new offices|les locaux = premises",
+"Raconter / remercier après un entretien d'embauche|Job interview message|",
+"Fête de départ après un séjour pro ; job d'été|Farewell party; summer job|"],
+"T2 Récit":[
+"*Salle trouvée pour la fête de fin d'année (100 personnes) : message à la direction|Report a venue found for the year-end party|",
+"*Nouvel emploi / travail à l'étranger / emploi saisonnier / deux jours dans une ferme|New job, job abroad, seasonal work|",
+"Journée de formation ; pique-nique entre collègues ; tout quitter pour changer de vie|Training day; changing your life|"],
+"T3 Débat":[
+"*Le rôle du travail (favorable ou défavorable ?)|The role of work in life|",
+"*Travail des étudiants pendant les vacances|Student summer jobs|",
+"*La sieste au travail|Napping at work|la sieste = nap",
+"Photo sur le CV ; amitiés au travail ; animaux au bureau|Photo on CV; friends at work; pets at office|",
+"Bien-être / productivité ; réduction du temps de travail ; diplôme ou expérience ; salaires des sportifs|Well-being; shorter hours|"]}],
+["Technologie & médias","",{
+"T2 Récit":[
+"Participer à une émission de télé ; arrêter les réseaux sociaux ; une télé dans la chambre ?|TV show; quitting social media; TV in bedroom|"],
+"T3 Débat":[
+"*Rôle de la télévision dans l'éducation des enfants|TV and children's education|",
+"*Les jeux vidéo (bienfaits cognitifs ou dépendance)|Video games|",
+"Objets connectés ; publicité (et enfants) ; nouvelles technologies pour les enfants|Smart devices; advertising; kids & tech|les objets connectés = smart devices"]}],
+["Lecture, culture & arts","",{
+"T1 Message":[
+"*Inviter un ami à un festival de musique / de cinéma|Invite a friend to a festival|",
+"*Rencontre avec un écrivain à la bibliothèque|Author meeting at the library|",
+"Visite culturelle ; concert de mon artiste préféré ; nouveau centre de loisirs ; coutumes de mon pays (Thomas)|Cultural outing; concert; customs|"],
+"T2 Récit":[
+"*Concert / spectacle / exposition de mon artiste préféré|A concert, show or exhibition|",
+"*Fête traditionnelle ; salon du livre|Traditional festival; book fair|",
+"*Concours : gagner un séjour dans ma ville préférée|Contest: describe your favourite city|",
+"Festival décevant ; théâtre ; école de musique portes ouvertes ; concours artistique|Disappointing festival; music school open day|"],
+"T3 Débat":[
+"*Livre papier ou numérique|Paper vs e-book|",
+"*Art urbain ou vandalisme|Street art or vandalism|l'art urbain = street art / graffiti",
+"*La lecture et les enfants|Reading and children|",
+"Gratuité des musées|Free museums|"]}],
+["Transport & mobilité","",{
+"T1 Message":[
+"*Mehdi / Anna : les transports dans ma ville|Explain your city's transport|",
+"*Répondre à une annonce : vendre mon vélo|Selling your bike|"],
+"T2 Récit":["*« Une semaine sans voiture » : mon expérience|Car-free week|"],
+"T3 Débat":[
+"*Interdire les voitures en centre-ville|Ban cars in city centres|",
+"*Les vols low-cost / à bas prix|Low-cost flights|",
+"Vélo en ville ; covoiturage ; transports en commun|Cycling; carpooling; public transport|"]}],
+["Santé, alimentation & sport","",{
+"T1 Message":[
+"*Conseiller une salle de sport à un ami|Recommend a gym|",
+"*Chercher un partenaire de sport / convaincre un ami de faire du sport|Find a sports partner|",
+"*Nouveau restaurant dans le quartier|New restaurant nearby|",
+"*J'ai gagné une compétition ; France Télévisions et le sport amateur ; événement sportif|Won a competition; amateur sport|",
+"Week-end sportif entre amis ; donner une recette|Sporty weekend; recipe|"],
+"T2 Récit":[
+"*Un cours de sport en salle ; une nouvelle activité de loisir ; une compétition|Gym class; new hobby; competition|",
+"*Restaurant ; cours / concours de cuisine ; Semaine du goût|Restaurant; cooking class; Taste Week|",
+"Changer son alimentation ; habitudes alimentaires de mon pays|Changing diet; food habits|"],
+"T3 Débat":[
+"*Restauration rapide|Fast food|la restauration rapide",
+"*Cuisinier amateur ou professionnel|Amateur vs pro cook|",
+"*Distributeurs automatiques dans les lycées|Vending machines in schools|un distributeur = vending machine",
+"*Repas livrés au bureau|Meal delivery at work|",
+"Menus sans viande à la cantine ; consommation de viande|Meat-free school menus|la cantine = school cafeteria",
+"Restaurant ou maison ; téléconsultation ; grands événements sportifs ; publicités alimentaires|Eat out vs home; online doctor|"]}],
+["Voyage & tourisme","",{
+"T1 Message":[
+"*Proposer un week-end entre amis ; inviter un ami en vacances chez moi|Plan a weekend; invite a friend|",
+"*Conseiller ma région / ma ville / un pays à découvrir|Recommend places|",
+"*Raconter mon week-end à la campagne|Tell about a countryside weekend|",
+"Hôtel : réserver ou le décrire ; parc de loisirs ; camping ; offrir un voyage ; ami qui arrive au Canada (visa)|Hotel; theme park; camping; gift trip|"],
+"T2 Récit":[
+"*Lettre de réclamation à une agence de voyages|Complaint letter to a travel agency|une réclamation = complaint",
+"*Découverte d'une ville / région / pays|Discovering a new place|",
+"*Partir un an et tout quitter : bonne idée ?|Quit everything to travel a year?|",
+"Séjour au Canada avec une agence ; journée à la campagne ; souvenir de voyage ; amis 2 semaines chez moi|Canada trip review; countryside day|"],
+"T3 Débat":["*Voyager seul ou accompagné|Travel alone or together|"]}],
+["Logement, ville & vie quotidienne","",{
+"T1 Message":[
+"*Instructions à Cédric qui garde ma maison et mon jardin|House-sitting instructions|arroser, nourrir",
+"*Déménagement : demander de l'aide / informer|Moving: ask for help|déménager",
+"*Nouvelle ville depuis un mois (Léo) ; journal « Bienvenue » sur les habitants|New town after one month|",
+"*Où faire ses courses (Bernard) ; où déjeuner en plein air (Barbara)|Where to shop / picnic|",
+"Chercher un logement (agence à Nice, ami) ; louer mon appartement ; chercher un colocataire|Housing search; renting out; flatmate|",
+"Changer la décoration ; colis endommagé (réclamation)|Redecorating; damaged parcel|"],
+"T2 Récit":[
+"*Brocante / vide-grenier|Flea market / garage sale|la brocante = flea market",
+"*Fête de quartier entre voisins|Neighbourhood party|",
+"*Quitter la ville pour la campagne ; ville vs campagne|Moving to the countryside|",
+"Expérience de colocation ; arrivée dans un pays étranger|Flat-share story; arriving abroad|"],
+"T3 Débat":[
+"*Petits commerces / producteurs locaux ou supermarché|Small shops / local producers vs supermarket|les grandes surfaces, les commerces de proximité",
+"*Vivre en colocation|Flat-sharing|",
+"*Vêtements de grande marque|Designer-brand clothing|",
+"*Produits faits maison|Homemade products|fait maison = homemade",
+"Ville ou campagne ; croissance des villes|City vs countryside; urban growth|",
+"Achats en ligne ; louer son appartement à des inconnus|Online shopping; short-term rentals|"]}],
+["Environnement & société","",{
+"T2 Récit":[
+"*Association pour personnes âgées / pour enfants du quartier (bénévolat)|Volunteering for elderly / kids|",
+"*Admiration pour une personnalité|Someone you admire|",
+"Vivre avec une personne âgée ; soirée écologique ; journée mondiale du nettoyage|Living with an elderly person; eco events|"],
+"T3 Débat":[
+"*L'utilisation du plastique|Plastic use|",
+"*Zoos ; chasse aux animaux|Zoos; hunting|la chasse = hunting",
+"*Caméras de surveillance|CCTV|",
+"*Égalité hommes-femmes au travail|Gender equality at work|",
+"Aide aux pauvres / sans-abri ; maisons de retraite ou maintien à domicile|Helping the poor; nursing homes|une maison de retraite = nursing home",
+"Réchauffement climatique ; villes et environnement|Climate change; cities|"]}]
+]};
+// Merged by topic: one line per idea; 4th field = where it was asked (O = oral, E = écrit, number = tâche)
+const T=[
+["Famille, enfants et relations",[
+"*Autorité / sévérité des parents ; parents exigeants ou permissifs ; contrôle parental|Strict vs permissive parenting||O3 E3",
+"*Vivre seul ou en famille ; être heureux célibataire ; solitude|Living alone vs with family||O3 E3",
+"*Jeunes adultes qui vivent chez leurs parents|Adults living with parents||O3 E3",
+"*Animaux de compagnie (enfants, personnes âgées, bonheur)|Pets||O3 E3 O2",
+"Argent pour les bonnes notes ; même éducation filles/garçons ; dire la vérité aux enfants ; surveiller leurs amis|Raising children||O3",
+"Ne pas avoir d'enfants ; amis vs famille ; amitié entre personnes différentes ; conseils des aînés|Family and friendship||O3",
+"*Anniversaire, fête, mariage, cadeau : inviter, organiser, raconter|Birthdays, parties, weddings||O2 E1 E2",
+"Garder un enfant / un animal ; baby-sitter|Babysitting, pet-sitting||O2",
+"Accueillir un étudiant étranger|Hosting a foreign student||E2"]],
+["Éducation, études et langues",[
+"*Longues études pour réussir / bien gagner sa vie ; diplôme ou expérience|Long studies vs success||O3 E3",
+"*Reprendre ses études à tout âge|Back to school as an adult||O3 E3",
+"*Technologies à l'école ; portable à l'école|Tech at school||O3 E3",
+"*Apprendre une langue (enfants, difficulté, en ligne, échange linguistique)|Learning languages||O3 O2 E1 E2 E3",
+"*École à la maison|Homeschooling||O3 E3",
+"*Étudier à l'étranger / au Canada|Studying abroad||O2 O3 E2",
+"Uniforme ; devoirs ; caméras à l'école ; privé ou public|School rules and types||E3",
+"Arts à l'école ; matières ; rôle de l'école ; sorties scolaires ; diversité ; financement et sélection|What school should be||O3",
+"Travailler pour payer ses études / jobs d'étudiants|Working students||O3 E3",
+"Formations en ligne / à distance|Online courses||O2 E2 E3"]],
+["Travail et carrière",[
+"*Âge de la retraite (70 ans) ; travail des seniors|Retirement age||O3",
+"*Salaire et motivation ; même salaire ; métiers durs mieux payés ; salaires des sportifs|Pay||O3 E3",
+"*Bien-être au travail ; sieste ; productivité ; temps de travail réduit|Well-being, naps, hours||O3 E3",
+"*Le rôle / la place du travail dans la vie ; bonheur au travail ; aimer son métier|Role of work in life||O3 E3",
+"*Changer de métier ; plusieurs carrières|Career change||O3 O2",
+"*Télétravail|Remote work||O3 O2",
+"*Chef homme ou femme ; égalité hommes-femmes au travail|Gender at work||O3 E3",
+"Relations au travail : amis, proches, animaux au bureau|Relationships at work||O3 E3",
+"Jeunes et emploi ; photo / apparence sur le CV ; entretien d'embauche|Getting hired||O3 O2 E1 E3",
+"Intégrer un nouveau salarié ; nouveau travail ; nouveaux locaux|Starting a new job||O3 O2 E1 E2",
+"Travailler à l'étranger ; emploi saisonnier ; tout quitter pour changer de vie|Working abroad; seasonal work||O2 E2"]],
+["Technologie, Internet et médias",[
+"*Télévision et éducation des enfants ; vivre sans télé ; télé dans la chambre|TV and children||O3 E2 E3",
+"*Jeux vidéo et enfants|Video games||O3 E3",
+"*Écrans, portables et enfants (interdire ?)|Screens and phones for kids||O3 E3",
+"*Réseaux sociaux (amitié, solitude, perte de temps, les arrêter)|Social media||O3 E2",
+"*Vivre sans Internet / portable / technologie|Life without tech||O3",
+"Technologie remplace le travail ; objets connectés|Automation; smart devices||O3 E3",
+"*Publicité (et enfants)|Advertising||O3 E3",
+"Achats en ligne et disparition des magasins|Online shopping||O3 E3",
+"Lettres et cartes ; info sur Internet ; relations à distance ; voyages spatiaux|Other tech topics||O3"]],
+["Culture, lecture et loisirs",[
+"*Livres : utiles ? papier ou numérique ? lecture des enfants|Books and reading||O3 E3",
+"*Culture / musées gratuits|Free culture||O3 E3",
+"Art urbain ou vandalisme|Street art||E3",
+"Actualités, médias, images violentes ; célébrités ; théâtre ou cinéma|News, celebrities||O3",
+"*Festival, concert, spectacle, exposition, film : inviter, se renseigner, raconter|Events and shows||O2 E1 E2",
+"Cours (musique, danse, théâtre, dessin), bibliothèque, musée|Classes and venues||O2 E1"]],
+["Santé, alimentation et sport",[
+"*Viande / végétarisme / menus sans viande|Meat and vegetarianism||O3 E3",
+"*Restauration rapide ; manger dehors ou cuisiner ; repas livrés au bureau|Fast food, eating out||E3",
+"*Cuisiner : amateur ou pro ; cuisine du pays ; habitudes alimentaires|Cooking and food culture||O3 E2 E3",
+"Bio ; régimes ; distributeurs à l'école ; publicités alimentaires|Healthy eating||O3 E3",
+"Stress ; médicaments ; soins gratuits ; téléconsultation ; tabac et alcool|Health||O3 E3",
+"*Sport : enfants, compétitions, motiver, salle de sport, partenaire|Sport||O3 O2 E1 E2",
+"Restaurant : nouveau, dîner, anniversaire|Restaurants||O2 E1 E2"]],
+["Transport",[
+"*Voitures interdites en centre-ville ; une semaine sans voiture|Car-free cities||O3 E2 E3",
+"*Vivre sans voiture ; vélo en ville ; covoiturage|Alternatives to cars||O3 O2 E3",
+"*Transports en commun (gratuits)|Public transport||O3 O2 E1 E3",
+"*Vols low-cost ; limiter l'avion|Cheap flights||E3 O3",
+"Louer / acheter / vendre une voiture ou un vélo|Renting or buying vehicles||O2 E1"]],
+["Voyages et tourisme",[
+"*Voyager seul ou accompagné|Solo travel||O3 E3",
+"*Tourisme : développement, surtourisme, nature|Effects of tourism||O3",
+"Voyager transforme ; découvrir sans voyager ; voyage pour les riches ; l'anglais|Value of travel||O3",
+"Partir un an et tout quitter|Quitting everything to travel||E2",
+"*Organiser des vacances / week-end (agence, office de tourisme, hôtel, chalet)|Planning a trip||O2 E1",
+"*Raconter / conseiller une ville, région, pays ; réclamation|Describing places; complaints||O2 E1 E2"]],
+["Immigration et vie à l'étranger",[
+"*Vivre à l'étranger : difficile ? courage ? toujours positif ?|Is living abroad hard?||O3 E2",
+"*Langue et intégration|Language and integration||O3",
+"*Intégration ou garder sa culture|Integrate vs keep your culture||O3",
+"*Emploi à l'étranger / au Canada|Finding work abroad||O3 E2",
+"*Âge pour partir ; enfants et intégration|Age and children||O3",
+"Faire des amis ; compatriotes ; rencontrer des gens au Canada|Social life abroad||O3 O2",
+"Pourquoi émigrer ; apport des immigrants ; mesures d'intégration|Reasons and impact||O3",
+"Arrivée dans un pays étranger (récit)|Arriving abroad||E1 E2"]],
+["Environnement",[
+"*Zoos ; chasse ; espèces menacées|Animals and zoos||O3 E3",
+"*Plastique, déchets, tri, petits gestes|Waste and plastic||O3 E3",
+"Économie et environnement ; énergies renouvelables ; climat ; villes|Climate and economy||O3 E3",
+"Produits locaux ; éducation à l'environnement|Local food; eco-education||O3",
+"Journée de nettoyage, soirée écologique, jardinage, bénévolat|Eco events||O2 E2"]],
+["Logement, ville et vie quotidienne",[
+"*Ville ou campagne ; croissance des villes ; quitter la ville|City vs countryside||O3 E2 E3",
+"*Colocation|Flat-sharing||O2 E1 E2 E3",
+"*Petits commerces / producteurs locaux vs supermarché|Where to shop||E3 E1 O2",
+"*Vêtements de marque ; mode|Designer clothes, fashion||E3 O3",
+"*Faits maison|Homemade products||E3",
+"Seconde main, brocante|Second-hand, flea markets||E2 O2 O3",
+"Louer son logement à des inconnus|Short-term rentals||E3 O2",
+"*Voisins : faire connaissance, fête de quartier|Neighbours||O2 E2",
+"*Déménager, garder la maison, chercher un logement|Moving and housing||O2 E1",
+"Tâches ménagères|Chores||O3"]],
+["Société, argent et engagement",[
+"*Apparence, rester jeune, chirurgie esthétique|Appearance||O3",
+"*Argent et bonheur ; jeux d'argent ; consommation|Money||O3",
+"*Égalité hommes-femmes ; parité ; droits des femmes|Gender equality||O3 E3",
+"*Aider les pauvres / sans-abri ; bénévolat ; associations|Helping others, volunteering||O3 O2 E2 E3",
+"*Caméras de surveillance ; liberté d'expression ; contrôle de l'État|Security and freedom||O3 E3",
+"Personnes âgées : maison de retraite, vivre avec elles|Elderly care||E2 E3 O2",
+"Les jeunes (respect, optimisme, engagement) ; politique|Youth and politics||O3",
+"Admiration pour une personnalité|Someone you admire||E2"]]
+];
+const G=[["la sieste","nap"],["la colocation / colocataire","flat-share / flatmate"],["la brocante, le vide-grenier","flea market, garage sale"],["le covoiturage","carpooling"],["vols low-cost / à bas prix","budget flights"],["l'art urbain","street art"],["un distributeur automatique","vending machine"],["la cantine","school cafeteria"],["la restauration rapide","fast food"],["fait maison","homemade"],["la parité","equal representation (gender)"],["les prestations sociales","welfare benefits"],["une maison de retraite","nursing home"],["la chasse","hunting"],["les objets connectés","smart devices"],["la télé-réalité","reality TV"],["les jeux d'argent et de hasard","gambling"],["la chirurgie esthétique","cosmetic surgery"],["une ludothèque","toy/game library"],["la salle des fêtes","community party hall"],["une animalerie","pet shop"],["la téléconsultation","online doctor visit"],["le ski de fond","cross-country skiing"],["une auto-école","driving school"],["un chalet","cottage/cabin"],["une chambre d'hôtes","B&B"],["le surtourisme","overtourism"],["les grandes surfaces","big supermarkets"],["les commerces de proximité","local shops"],["les vêtements de marque","designer clothes"],["l'uniforme scolaire","school uniform"],["les devoirs","homework"],["l'instruction en famille","homeschooling"],["le télétravail","remote work"],["se reconvertir","change careers"],["la pénibilité","physical hardship of a job"],["un entretien d'embauche","job interview"],["les locaux","premises/offices"],["le bénévolat","volunteering"],["les sans-abri","homeless people"],["une ONG","NGO"],["le tri des déchets","sorting waste"],["en voie de disparition","endangered"],["le pays d'accueil","host country"],["le mal du pays","homesickness"],["déménager / emménager","move out / move in"],["le locataire / le propriétaire","tenant / landlord"],["le loyer, les charges","rent, utility costs"],["une réclamation","complaint"],["la Semaine du goût","Taste Week (food-education event)"],["un déguisement","costume"],["élever un enfant","raise a child"],["laxiste / sévère","permissive / strict"],["épanoui","fulfilled"],["célibataire","single"],["la retraite","retirement"]];
+
+const out=document.getElementById('out'),q=document.getElementById('q');let tab='topics';
+try{tab=localStorage.getItem('tcf-tab')||'topics'}catch(e){}
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function item(s){const hot=s[0]==='*';const [fr,en,v]=(hot?s.slice(1):s).split('|');
+  const src=(s.split('|')[3]||'').split(' ').filter(Boolean).map(x=>`<span class="src">${x[0]==='O'?'Oral':'Écrit'} T${x[1]}</span>`).join('');
+  const chips=src+(v||'').split(',').map(x=>x.trim()).filter(Boolean).map(x=>`<span class="v">${esc(x)}</span>`).join('');
+  return `<li class="${hot?'hot':''}"><div class="fr">${esc(fr)}</div><div class="tr">${esc(en)}</div>${chips?`<div>${chips}</div>`:''}</li>`}
+function render(){
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===tab));
+  const f=q.value.trim().toLowerCase();let h='';
+  if(tab==='gloss'){const r=G.filter(([a,b])=>!f||(a+b).toLowerCase().includes(f));
+    h=`<details class="fam" open><summary>Tricky words <span class="en">${r.length}</span></summary><div class="gl">${r.map(([a,b])=>`<div><b>${esc(a)}</b><br><span class="tr">${esc(b)}</span></div>`).join('')}</div></details>`;}
+  else if(tab==='topics'){for(const [name,items] of T){const it=items.filter(s=>!f||s.toLowerCase().includes(f));
+    if(it.length)h+=`<details class="fam" ${f?'open':''}><summary><span>${esc(name)} <span class="en">· ${it.length}</span></span></summary><div class="task"><ul>${it.map(item).join('')}</ul></div></details>`}}
+  else for(const [name,en,tasks] of D[tab]){
+    let body='',n=0;
+    for(const [t,items] of Object.entries(tasks)){const it=items.filter(s=>!f||s.toLowerCase().includes(f));n+=it.length;
+      if(it.length)body+=`<div class="task"><h3>${t}</h3><ul>${it.map(item).join('')}</ul></div>`}
+    if(n)h+=`<details class="fam" ${f?'open':''}><summary><span>${esc(name)} ${en?`<span class="en">· ${esc(en)}</span>`:''}</span></summary>${body}</details>`;}
+  out.innerHTML=h||'<p class="empty">No match. Try another word, or switch tab.</p>';
+}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;try{localStorage.setItem('tcf-tab',tab)}catch(e){}render()});
+q.oninput=render;render();
+</script>

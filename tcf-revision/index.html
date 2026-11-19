@@ -45,6 +45,9 @@ li.hot{background:linear-gradient(90deg,var(--hotbg),transparent 70%)}
 .gl div{border-top:1px solid var(--line);padding-top:5px;min-width:0}
 .gl b{font-weight:600}
 .src{display:inline-block;font:600 11px var(--body);color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:0 5px;margin:3px 4px 0 0}
+.ans{margin-top:6px}.ans>summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--accent)}
+.ans ul{margin:4px 0 0}.ans li{display:flex;flex-wrap:wrap;gap:4px 10px;justify-content:space-between;font-size:13px;padding:5px 0}
+.sq{flex:1 1 260px;min-width:0;color:var(--muted)}.ans a{color:var(--accent);font-weight:600;white-space:nowrap}.ans a.fo{color:var(--hot)}.na{color:var(--muted);font-style:italic}
 .empty{color:var(--muted);padding:20px 0}
 </style>
 
@@ -58,7 +61,7 @@ li.hot{background:linear-gradient(90deg,var(--hotbg),transparent 70%)}
   <button class="tab" role="tab" data-t="gloss">Tricky words</button>
   <input id="q" type="search" placeholder="Search (e.g. sieste, voiture, nap)">
 </div>
-<p class="legend"><b>★</b> = asked many times (high priority). Oral: Tâche 3 = give your opinion, Tâche 2 = ask questions in a role-play. Écrit: T1 = 60–120-word message, T2 = 120–150-word story/blog, T3 = argue from two documents.</p>
+<p class="legend"><b>★</b> = asked many times (high priority). Oral: Tâche 3 = give your opinion, Tâche 2 = ask questions in a role-play. Écrit: T1 = 60–120-word message, T2 = 120–150-word story/blog, T3 = argue from two documents. Open <b style="color:var(--accent)">Model answers</b> under a question to see every original wording, with a Réussir link and month/combinaison, or a Formation link when Réussir doesn't have it (subscriber login needed on both sites).</p>
 <div id="out"></div>
 </div>
 
@@ -538,22 +541,32 @@ const G=[["la sieste","nap"],["la colocation / colocataire","flat-share / flatma
 const out=document.getElementById('out'),q=document.getElementById('q');let tab='topics';
 try{tab=localStorage.getItem('tcf-tab')||'topics'}catch(e){}
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-function item(s){const hot=s[0]==='*';const [fr,en,v]=(hot?s.slice(1):s).split('|');
+let A=null;fetch('answers.json').then(r=>r.json()).then(j=>{A=j;render()}).catch(()=>{});
+function links(ids){if(!A||!ids||!ids.length)return '';
+  const rows=ids.map(i=>{const s=A.S[i];let l;
+    if(s.r)l=`<a href="${s.r}" target="_blank" rel="noopener">Réussir${s.rl?' · '+esc(s.rl):''}</a>`;
+    else if(s.o)l=`<a class="fo" href="${s.o}" target="_blank" rel="noopener">Formation${s.ol?' · '+esc(s.ol):''}</a>`;
+    else l='<span class="na">no corrigé</span>';
+    return `<li><span class="sq">${esc(s.q)}</span>${l}</li>`}).join('');
+  return `<details class="ans"><summary>Model answers (${ids.length})</summary><ul>${rows}</ul></details>`}
+function item(s,ids){const hot=s[0]==='*';const [fr,en,v]=(hot?s.slice(1):s).split('|');
   const src=(s.split('|')[3]||'').split(' ').filter(Boolean).map(x=>`<span class="src">${x[0]==='O'?'Oral':'Écrit'} T${x[1]}</span>`).join('');
   const chips=src+(v||'').split(',').map(x=>x.trim()).filter(Boolean).map(x=>`<span class="v">${esc(x)}</span>`).join('');
-  return `<li class="${hot?'hot':''}"><div class="fr">${esc(fr)}</div><div class="tr">${esc(en)}</div>${chips?`<div>${chips}</div>`:''}</li>`}
+  return `<li class="${hot?'hot':''}"><div class="fr">${esc(fr)}</div><div class="tr">${esc(en)}</div>${chips?`<div>${chips}</div>`:''}${links(ids)}</li>`}
+function list(items,bk,f){const [b,o]=bk||[[],[]];let h='';
+  items.forEach((s,k)=>{if(!f||s.toLowerCase().includes(f))h+=item(s,b[k])});
+  if(!f&&o&&o.length)h+=`<li><div class="tr">Other questions in this section</div>${links(o)}</li>`;return h}
 function render(){
   document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===tab));
   const f=q.value.trim().toLowerCase();let h='';
   if(tab==='gloss'){const r=G.filter(([a,b])=>!f||(a+b).toLowerCase().includes(f));
     h=`<details class="fam" open><summary>Tricky words <span class="en">${r.length}</span></summary><div class="gl">${r.map(([a,b])=>`<div><b>${esc(a)}</b><br><span class="tr">${esc(b)}</span></div>`).join('')}</div></details>`;}
-  else if(tab==='topics'){for(const [name,items] of T){const it=items.filter(s=>!f||s.toLowerCase().includes(f));
-    if(it.length)h+=`<details class="fam" ${f?'open':''}><summary><span>${esc(name)} <span class="en">· ${it.length}</span></span></summary><div class="task"><ul>${it.map(item).join('')}</ul></div></details>`}}
-  else for(const [name,en,tasks] of D[tab]){
-    let body='',n=0;
-    for(const [t,items] of Object.entries(tasks)){const it=items.filter(s=>!f||s.toLowerCase().includes(f));n+=it.length;
-      if(it.length)body+=`<div class="task"><h3>${t}</h3><ul>${it.map(item).join('')}</ul></div>`}
-    if(n)h+=`<details class="fam" ${f?'open':''}><summary><span>${esc(name)} ${en?`<span class="en">· ${esc(en)}</span>`:''}</span></summary>${body}</details>`;}
+  else if(tab==='topics'){T.forEach(([name,items],k)=>{const l=list(items,A&&A.R.topics[k],f);
+    if(l)h+=`<details class="fam" ${f?'open':''}><summary><span>${esc(name)}</span></summary><div class="task"><ul>${l}</ul></div></details>`})}
+  else D[tab].forEach(([name,en,tasks],fi)=>{let body='';
+    for(const [t,items] of Object.entries(tasks)){const l=list(items,A&&A.R[tab][fi][t],f);
+      if(l)body+=`<div class="task"><h3>${t}</h3><ul>${l}</ul></div>`}
+    if(body)h+=`<details class="fam" ${f?'open':''}><summary><span>${esc(name)} ${en?`<span class="en">· ${esc(en)}</span>`:''}</span></summary>${body}</details>`;});
   out.innerHTML=h||'<p class="empty">No match. Try another word, or switch tab.</p>';
 }
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;try{localStorage.setItem('tcf-tab',tab)}catch(e){}render()});
